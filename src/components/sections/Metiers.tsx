@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -33,53 +33,70 @@ const METIERS = [
   },
 ];
 
-/* Section pinnée : les 4 métiers défilent horizontalement comme des plans de film */
+/**
+ * Défilement horizontal cinématique SANS pin ScrollTrigger : le pin-spacer
+ * reparente la section et fait planter React au changement de route
+ * (removeChild). Ici : section haute + conteneur sticky + translation scrubée.
+ */
 export default function Metiers() {
-  const wrap = useRef<HTMLDivElement>(null);
+  const wrap = useRef<HTMLElement>(null);
   const track = useRef<HTMLDivElement>(null);
+  const [extra, setExtra] = useState(0); // longueur horizontale à parcourir (px)
 
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce), (max-width: 767px)').matches) return;
+
+    const measure = () => setExtra(Math.max(0, track.current!.scrollWidth - window.innerWidth));
+    measure();
+    window.addEventListener('resize', measure);
+
     const ctx = gsap.context(() => {
-      const getX = () => -(track.current!.scrollWidth - window.innerWidth);
-      const tl = gsap.to(track.current, {
-        x: getX, ease: 'none',
+      const tween = gsap.to(track.current, {
+        x: () => -(track.current!.scrollWidth - window.innerWidth), ease: 'none',
         scrollTrigger: {
-          trigger: wrap.current, start: 'top top', end: () => `+=${-getX()}`,
-          scrub: 0.7, pin: true, invalidateOnRefresh: true,
+          trigger: wrap.current, start: 'top top', end: 'bottom bottom',
+          scrub: 0.7, invalidateOnRefresh: true,
         },
       });
-      // légère rotation 3D de chaque panneau pendant la traversée
       gsap.utils.toArray<HTMLElement>('.metier-panel').forEach((panel) => {
         gsap.fromTo(panel, { rotateY: 9, scale: 0.96 }, {
           rotateY: -9, scale: 1, ease: 'none',
-          scrollTrigger: { trigger: panel, containerAnimation: tl, start: 'left right', end: 'right left', scrub: true },
+          scrollTrigger: {
+            trigger: panel, containerAnimation: tween,
+            start: 'left right', end: 'right left', scrub: true,
+          },
         });
       });
-      return () => tl.scrollTrigger?.kill();
     }, wrap);
-    return () => ctx.revert();
+    return () => { window.removeEventListener('resize', measure); ctx.revert(); };
   }, []);
 
   return (
-    <section ref={wrap} id="metiers" className="relative overflow-x-clip bg-night">
-      <div className="pt-20 lg:pt-24">
-        <div className="mx-auto max-w-7xl px-5 lg:px-8">
+    <section
+      ref={wrap}
+      id="metiers"
+      className="relative bg-night"
+      style={extra ? { height: `calc(100vh + ${extra}px)` } : undefined}
+    >
+      <div className="md:sticky md:top-0 md:flex md:h-screen md:flex-col md:justify-center md:overflow-x-clip">
+        <div className="mx-auto w-full max-w-7xl px-5 pt-20 md:pt-0 lg:px-8">
           <SectionHead num="CH. 01" kicker="Quatre métiers, une famille" />
           <h2 className="h-chapter text-[clamp(2.2rem,6vw,4.8rem)]">
             Les mains <span className="font-serif-it normal-case tracking-normal text-gradient-brass">du métier</span>
           </h2>
         </div>
 
-        <div ref={track} className="mt-10 flex flex-col gap-8 px-5 pb-20 md:mt-14 md:w-max md:flex-row md:flex-nowrap md:gap-10 md:pl-[max(2rem,calc((100vw-80rem)/2+2rem))] md:pr-24 lg:pb-24"
+        <div
+          ref={track}
+          className="mt-10 flex flex-col gap-8 px-5 pb-20 will-change-transform md:mt-12 md:w-max md:flex-row md:flex-nowrap md:gap-10 md:pb-0 md:pl-[max(2rem,calc((100vw-80rem)/2+2rem))] md:pr-24"
           style={{ perspective: 1100 }}
         >
           {METIERS.map((m) => (
-            <article key={m.num} className="metier-panel w-full md:w-[min(72vw,860px)]" style={{ transformStyle: 'preserve-3d' }}>
+            <article key={m.num} className="metier-panel w-full md:w-[min(66vw,780px)]" style={{ transformStyle: 'preserve-3d' }}>
               <Tilt3D max={4}>
                 <Link href={m.href} className="card-glass group block overflow-hidden rounded-3xl">
-                  <MediaPlaceholder type="video" src={m.img} alt={m.titre} plan={m.video} ratio="aspect-[16/9]" className="rounded-b-none border-0" />
-                  <Depth z={30} className="p-7 lg:p-9">
+                  <MediaPlaceholder type="video" src={m.img} alt={m.titre} plan={m.video} ratio="aspect-[16/8]" className="rounded-b-none border-0" />
+                  <Depth z={30} className="p-7 lg:p-8">
                     <div className="flex items-baseline justify-between gap-4">
                       <h3 className="h-chapter text-3xl lg:text-4xl">
                         <span className="mr-3 font-mono-tech text-sm text-flame">{m.num}</span>
@@ -88,7 +105,7 @@ export default function Metiers() {
                       <span className="font-serif-it text-lg text-brass-2">{m.accent}</span>
                     </div>
                     <p className="mt-4 max-w-xl text-sm leading-relaxed text-ivory/65">{m.texte}</p>
-                    <span className="mt-6 inline-flex items-center gap-2 font-mono-tech text-[0.7rem] uppercase tracking-[0.25em] text-ivory/60 transition-all group-hover:gap-4 group-hover:text-brass-2">
+                    <span className="mt-5 inline-flex items-center gap-2 font-mono-tech text-[0.7rem] uppercase tracking-[0.25em] text-ivory/60 transition-all group-hover:gap-4 group-hover:text-brass-2">
                       Découvrir <ArrowRight size={14} />
                     </span>
                   </Depth>
