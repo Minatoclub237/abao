@@ -1,0 +1,166 @@
+@import "tailwindcss";
+
+@theme {
+  --color-night: #06090f;
+  --color-night-2: #0b1220;
+  --color-surface: #101a2b;
+  --color-line: rgba(214, 226, 245, 0.1);
+  --color-ivory: #f2ede4;
+  --color-muted: #8b96a8;
+  --color-brass: #c9a227;
+  --color-brass-2: #e8c766;
+  --color-flame: #f07818;
+  --color-flame-2: #ff9a3d;
+  --color-glass: #9ad6e8;
+
+  --font-display: "Bricolage Grotesque Variable", "Arial Black", sans-serif;
+  --font-serif: "Instrument Serif", Georgia, serif;
+  --font-body: "Inter Variable", system-ui, sans-serif;
+  --font-mono: "Monaspace Neon", ui-monospace, monospace;
+}
+
+html {
+  background: var(--color-night);
+  color: var(--color-ivory);
+  scrollbar-color: rgba(201, 162, 39, 0.5) #06090f;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.65;
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection { background: var(--color-flame); color: #fff; }
+
+/* ——— typographie ——— */
+.font-display { font-family: var(--font-display); }
+.font-serif-it { font-family: var(--font-serif); font-style: italic; font-weight: 400; }
+.font-mono-tech {
+  font-family: var(--font-mono);
+  font-feature-settings: "calt" 1; /* texture healing Monaspace */
+  letter-spacing: 0.08em;
+}
+
+/* titres de chapitre : Bricolage étroit et très gras */
+.h-chapter {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-variation-settings: "wdth" 78, "opsz" 96;
+  line-height: 0.92;
+  letter-spacing: -0.015em;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+/* hero : Bricolage large */
+.h-hero {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-variation-settings: "wdth" 100, "opsz" 96;
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+}
+
+.kicker {
+  font-family: var(--font-mono);
+  font-feature-settings: "calt" 1;
+  font-size: 0.72rem;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--color-brass-2);
+}
+
+/* ——— matière ——— */
+.text-gradient-brass {
+  background: linear-gradient(105deg, #8a6d14 0%, #e8c766 35%, #fff3c4 50%, #c9a227 65%, #7c620f 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.text-gradient-flame {
+  background: linear-gradient(100deg, #f07818, #ffb15c 55%, #f07818);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.grain::after {
+  content: "";
+  position: fixed;
+  inset: -50%;
+  z-index: 80;
+  pointer-events: none;
+  opacity: 0.055;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain 7s steps(8) infinite;
+}
+@keyframes grain {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(-3%, 2%); }
+  50% { transform: translate(2%, -3%); }
+  75% { transform: translate(-2%, -2%); }
+}
+
+.vignette {
+  background: radial-gradient(120% 90% at 50% 30%, transparent 55%, rgba(3, 5, 9, 0.75) 100%);
+}
+
+.card-glass {
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.012));
+  border: 1px solid var(--color-line);
+  backdrop-filter: blur(8px);
+}
+
+.duotone { filter: saturate(0.55) contrast(1.06) brightness(0.9); }
+.duotone-strong { filter: saturate(0.2) contrast(1.1) brightness(0.72) sepia(0.22); }
+
+/* cadre « plan de tournage » pour les placeholders vidéo */
+.slate-corner { position: relative; }
+.slate-corner::before,
+.slate-corner::after {
+  content: "";
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border: 1px solid rgba(232, 199, 102, 0.55);
+  z-index: 3;
+  pointer-events: none;
+}
+.slate-corner::before { top: 10px; left: 10px; border-right: 0; border-bottom: 0; }
+.slate-corner::after { bottom: 10px; right: 10px; border-left: 0; border-top: 0; }
+
+@keyframes scan {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(420%); }
+}
+.scanline {
+  position: absolute;
+  inset-inline: 0;
+  height: 26%;
+  background: linear-gradient(180deg, transparent, rgba(232, 199, 102, 0.07), transparent);
+  animation: scan 4.2s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.animate-marquee { animation: marquee 36s linear infinite; }
+.animate-marquee-slow { animation: marquee 58s linear infinite; }
+
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgba(240, 120, 24, 0.45); }
+  80%, 100% { box-shadow: 0 0 0 18px rgba(240, 120, 24, 0); }
+}
+.pulse-ring { animation: pulse-ring 2.2s cubic-bezier(0.2, 0.6, 0.4, 1) infinite; }
+
+/* Lenis */
+html.lenis-active { scroll-behavior: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  .grain::after, .scanline, .animate-marquee, .animate-marquee-slow, .pulse-ring { animation: none; }
+}
