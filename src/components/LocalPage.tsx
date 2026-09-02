@@ -55,7 +55,7 @@ export default function LocalPage({ service, lieu }: { service: ServiceKey; lieu
           </p>
           <div className="mt-8"><CallCta sub="devis gratuit, prix annoncé avant" /></div>
         </div>
-        <MediaPlaceholder type="video" src={s.img} alt={`${s.metier} à ${lieu.nom}`} plan={s.video} ratio="aspect-[4/3]" priority />
+        <MediaPlaceholder videoSrc={s.videoSrc} poster={s.poster} alt={`${s.metier} à ${lieu.nom}`} plan={s.video} ratio="aspect-[4/3]" />
       </header>
 
       {/* prestations */}

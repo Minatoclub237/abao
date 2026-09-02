@@ -3,7 +3,7 @@ import type { Lieu } from '@/data/lieux';
 export type ServiceKey = 'serrurerie' | 'vitrerie' | 'rideau-metallique';
 
 export const SERVICES: Record<ServiceKey, {
-  nom: string; metier: string; img: string; video: string;
+  nom: string; metier: string; img: string; video: string; videoSrc: string; poster: string;
   prestations: { t: string; d: string }[];
   intro: (l: Lieu) => string;
   faq: (l: Lieu) => { q: string; a: string }[];
@@ -12,6 +12,7 @@ export const SERVICES: Record<ServiceKey, {
     nom: 'Serrurerie',
     metier: 'Serrurier',
     img: '/images/serrure-poignee.webp',
+    videoSrc: '/videos/pv-serrurerie.mp4', poster: '/videos/pv-serrurerie-poster.jpg',
     video: 'PLAN · Ouverture fine d’une porte claquée · 6 s',
     prestations: [
       { t: 'Ouverture de porte', d: 'porte claquée ouverte « zéro dégât » à la radio ou au by-pass, porte verrouillée ouverte proprement' },
@@ -32,6 +33,7 @@ export const SERVICES: Record<ServiceKey, {
     nom: 'Vitrerie',
     metier: 'Vitrier',
     img: '/images/bris-de-glace.webp',
+    videoSrc: '/videos/pv-vitrerie.mp4', poster: '/videos/pv-vitrerie-poster.jpg',
     video: 'PLAN · Remplacement de vitrine, avant/après · 8 s',
     prestations: [
       { t: 'Remplacement de vitre', d: 'toutes épaisseurs : simple, double vitrage thermique et acoustique, survitrage' },
@@ -51,6 +53,7 @@ export const SERVICES: Record<ServiceKey, {
     nom: 'Rideau métallique',
     metier: 'Dépannage rideau métallique',
     img: '/images/rideau-depannage.webp',
+    videoSrc: '/videos/pv-rideau.mp4', poster: '/videos/pv-rideau-poster.jpg',
     video: 'PLAN · Rideau de boutique qui remonte · 5 s',
     prestations: [
       { t: 'Déblocage d’urgence', d: 'rideau coincé ouvert ou fermé, intervention immédiate pour rouvrir votre commerce' },

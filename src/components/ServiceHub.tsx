@@ -2,42 +2,31 @@ import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
 import { ARRONDISSEMENTS, COMMUNES } from '@/data/lieux';
 import { SERVICES, type ServiceKey } from '@/lib/services';
-import { MediaPlaceholder, CallCta, SectionHead } from '@/components/ui';
-import { Reveal, Fade } from '@/components/motion/motion';
+import { SectionHead } from '@/components/ui';
+import PageHero from '@/components/PageHero';
 
-/* Page-chapitre d'un métier : prestations + accès aux 28 pages locales */
+const HERO_VIDEO: Record<ServiceKey, string> = {
+  serrurerie: 'pv-serrurerie',
+  vitrerie: 'pv-vitrerie',
+  'rideau-metallique': 'pv-rideau',
+};
+
+/* Page-chapitre d'un métier : hero cinématique plein écran + accès aux 28 pages locales */
 export default function ServiceHub({ service, sub }: { service: ServiceKey; sub: string }) {
   const s = SERVICES[service];
+  const v = HERO_VIDEO[service];
   return (
-    <article className="pt-24">
-      <header className="mx-auto grid max-w-7xl items-end gap-10 px-5 pb-14 pt-8 lg:grid-cols-[1.2fr_1fr] lg:px-8">
-        <div>
-          <p className="kicker mb-4">Marseille · Aubagne · Aix-en-Provence & alentours</p>
-          <h1 className="h-chapter text-[clamp(2.6rem,7vw,5.5rem)]">
-            <Reveal as="span">{s.nom}</Reveal>
-          </h1>
-          <p className="mt-2 font-serif-it text-2xl text-brass-2">{sub}</p>
-          <div className="mt-8"><CallCta sub="24h/24 — 7j/7, devis gratuit" /></div>
-        </div>
-        <MediaPlaceholder type="video" src={s.img} alt={s.nom} plan={s.video} ratio="aspect-[4/3]" priority />
-      </header>
+    <article>
+      <PageHero
+        videoSrc={`/videos/${v}.mp4`}
+        poster={`/videos/${v}-poster.jpg`}
+        kicker="Marseille · Aubagne · Aix-en-Provence & alentours"
+        titre={s.nom}
+        accent={sub}
+        items={s.prestations}
+      />
 
-      <section className="border-y border-line bg-night-2 py-16">
-        <div className="mx-auto max-w-7xl px-5 lg:px-8">
-          <SectionHead num="01" kicker="Ce que nous faisons" />
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {s.prestations.map((p, i) => (
-              <Fade key={p.t} delay={i * 0.06} className="card-glass rounded-2xl p-6">
-                <p className="font-mono-tech text-[0.65rem] text-flame">0{i + 1}</p>
-                <h2 className="mt-2 font-display text-lg font-bold">{p.t}</h2>
-                <p className="mt-2 text-[0.82rem] leading-relaxed text-ivory/55">{p.d}</p>
-              </Fade>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-7xl px-5 py-16 lg:px-8">
+      <section id="suite" className="mx-auto max-w-7xl px-5 py-16 lg:px-8">
         <SectionHead num="02" kicker="Choisissez votre secteur" />
         <h2 className="h-chapter text-3xl">Marseille, par arrondissement</h2>
         <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { TreeDeciduous, Droplets, Scissors } from 'lucide-react';
-import { MediaPlaceholder, CallCta, SectionHead } from '@/components/ui';
-import { Reveal } from '@/components/motion/motion';
+import { MediaPlaceholder, SectionHead } from '@/components/ui';
+import PageHero from '@/components/PageHero';
 
 export const metadata: Metadata = {
   title: 'Jardinier paysagiste à Aubagne & Marseille — Thierry Scarica, 30 ans de métier',
@@ -17,25 +17,24 @@ const PRESTA = [
 
 export default function Page() {
   return (
-    <article className="pt-24">
-      <header className="mx-auto grid max-w-7xl items-end gap-10 px-5 pb-14 pt-8 lg:grid-cols-[1.2fr_1fr] lg:px-8">
-        <div>
-          <p className="kicker mb-4">Le réseau abao.fr — Aubagne · Marseille 11e · Auriol · Gémenos</p>
-          <h1 className="h-chapter text-[clamp(2.4rem,6.5vw,5rem)]">
-            <Reveal as="span">Jardinier</Reveal>{' '}
-            <span className="font-serif-it normal-case tracking-normal text-[#8fbe6d]">paysagiste</span>
-          </h1>
-          <p className="mt-6 max-w-xl text-ivory/70">
-            Thierry Scarica, <strong className="text-ivory">30 ans d’expérience</strong>, entretient jardins et
-            espaces verts de la vallée de l’Huveaune : de la taille de haie au jardin créé de A à Z,
-            en passant par les contrats d’entretien à l’année.
-          </p>
-          <div className="mt-8"><CallCta label="Demander un devis jardin" sub="déplacement et devis gratuits" /></div>
-        </div>
-        <MediaPlaceholder type="video" src="/images/jardinier.webp" alt="Travail de la terre au jardin" plan="PLAN · Bêchage au lever du soleil · 5 s" ratio="aspect-[4/3]" priority />
-      </header>
+    <article>
+      <PageHero
+        videoSrc="/videos/pv-jardinier.mp4"
+        poster="/videos/pv-jardinier-poster.jpg"
+        kicker="Le réseau abao.fr — Aubagne · Marseille 11e · Auriol · Gémenos"
+        titre="Jardinier paysagiste"
+        accent="Thierry Scarica, 30 ans de métier."
+        intro="De la taille de haie au jardin créé de A à Z, en passant par les contrats d’entretien à l’année, dans toute la vallée de l’Huveaune."
+        itemsTitre="Prestations"
+        items={[
+          { t: 'Taille & élagage', d: 'haies, palmiers, fruitiers, abattages délicats et travaux acrobatiques' },
+          { t: 'Arrosage automatique', d: 'création, réparation et mise en hivernage de réseaux d’arrosage' },
+          { t: 'Création & entretien', d: 'engazonnement, plantations, débroussaillage, contrats à l’année' },
+          { t: 'Maçonnerie paysagère', d: 'murets, bordures, allées — le jardin pensé comme un tout' },
+        ]}
+      />
 
-      <section className="border-y border-line bg-night-2 py-16">
+      <section id="suite" className="border-y border-line bg-night-2 py-16">
         <div className="mx-auto max-w-7xl px-5 lg:px-8">
           <SectionHead num="01" kicker="Prestations" />
           <div className="grid gap-6 lg:grid-cols-3">

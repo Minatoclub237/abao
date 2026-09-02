@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import { ShieldCheck, Layers, DoorClosed } from 'lucide-react';
-import { MediaPlaceholder, CallCta, SectionHead } from '@/components/ui';
-import { Reveal, Fade } from '@/components/motion/motion';
+import { SectionHead } from '@/components/ui';
+import { Fade } from '@/components/motion/motion';
+import PageHero from '@/components/PageHero';
 
 export const metadata: Metadata = {
   title: 'Blindage de porte à Marseille & Aubagne — A2P, BP1 à BP3',
@@ -34,26 +35,20 @@ export default function Page() {
     mainEntity: FAQ.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
   };
   return (
-    <article className="pt-24">
+    <article>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
-      <header className="mx-auto grid max-w-7xl items-end gap-10 px-5 pb-14 pt-8 lg:grid-cols-[1.2fr_1fr] lg:px-8">
-        <div>
-          <p className="kicker mb-4">Serrurerie de sécurité — Marseille, Aubagne, Aix</p>
-          <h1 className="h-chapter text-[clamp(2.4rem,6.5vw,5rem)]">
-            <Reveal as="span">Blindage</Reveal>{' '}
-            <span className="font-serif-it normal-case tracking-normal text-gradient-brass">de porte</span>
-          </h1>
-          <p className="mt-6 max-w-xl text-ivory/70">
-            Le blindage d’une porte coûte bien moins cher que la pose d’une porte blindée —
-            et, certifié, il protège aussi bien. Acier plié, cornières anti-pince, gâche renforcée
-            et serrure multipoints A2P : votre porte devient une armure.
-          </p>
-          <div className="mt-8"><CallCta label="Étudier mon blindage" sub="visite et devis gratuits" /></div>
-        </div>
-        <MediaPlaceholder type="video" src="/images/serrure-poignee.webp" alt="Porte blindée avec multipoints" plan="PLAN · Fermeture d’une multipoints, macro · 4 s" ratio="aspect-[4/3]" priority />
-      </header>
+      <PageHero
+        videoSrc="/videos/pv-blindage.mp4"
+        poster="/videos/pv-blindage-poster.jpg"
+        kicker="Serrurerie de sécurité — Marseille, Aubagne, Aix"
+        titre="Blindage de porte"
+        accent="Votre porte devient une armure."
+        intro="Le blindage d’une porte coûte bien moins cher qu’une porte blindée — et, certifié, il protège aussi bien."
+        itemsTitre="Trois niveaux de protection"
+        items={TYPES.map((t) => ({ t: t.t, d: t.d }))}
+      />
 
-      <section className="border-y border-line bg-night-2 py-16">
+      <section id="suite" className="border-y border-line bg-night-2 py-16">
         <div className="mx-auto max-w-7xl px-5 lg:px-8">
           <SectionHead num="01" kicker="Trois niveaux de protection" />
           <div className="grid gap-6 lg:grid-cols-3">

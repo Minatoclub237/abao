@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
 import { Flame, FileCheck, Brush } from 'lucide-react';
 import { RAMONAGE_PRIX } from '@/data/site';
-import { MediaPlaceholder, CallCta, SectionHead } from '@/components/ui';
-import { Reveal, Fade } from '@/components/motion/motion';
+import { MediaPlaceholder, SectionHead } from '@/components/ui';
+import { Fade } from '@/components/motion/motion';
+import PageHero from '@/components/PageHero';
 
 export const metadata: Metadata = {
   title: 'Ramonage à Marseille & en PACA — dès 50 €, certificat fourni',
@@ -12,25 +13,24 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <article className="pt-24">
-      <header className="mx-auto grid max-w-7xl items-end gap-10 px-5 pb-14 pt-8 lg:grid-cols-[1.2fr_1fr] lg:px-8">
-        <div>
-          <p className="kicker mb-4">Le réseau abao.fr — Marseille & PACA</p>
-          <h1 className="h-chapter text-[clamp(2.4rem,6.5vw,5rem)]">
-            <Reveal as="span">Ramonage</Reveal>{' '}
-            <span className="font-serif-it normal-case tracking-normal text-gradient-flame">certifié</span>
-          </h1>
-          <p className="mt-6 max-w-xl text-ivory/70">
-            Obligatoire une fois par an pour rester couvert par votre assurance. Nos ramoneurs
-            travaillent aux cannes en fibre de carbone et hérissons adaptés, protègent votre intérieur
-            (bâches, aspirateur professionnel) et délivrent un <strong className="text-ivory">certificat numéroté</strong>.
-          </p>
-          <div className="mt-8"><CallCta label="Prendre rendez-vous" sub="créneaux rapides toute l’année" /></div>
-        </div>
-        <MediaPlaceholder type="video" src="/images/cheminee-moderne.webp" alt="Cheminée moderne" plan="PLAN · Feu qui prend dans l’âtre, macro · 6 s" ratio="aspect-[4/3]" priority />
-      </header>
+    <article>
+      <PageHero
+        videoSrc="/videos/pv-ramonage.mp4"
+        poster="/videos/pv-ramonage-poster.jpg"
+        kicker="Le réseau abao.fr — Marseille & PACA"
+        titre="Ramonage certifié"
+        accent="obligatoire une fois par an, dès 50 €."
+        intro="Nos ramoneurs protègent votre intérieur, travaillent aux cannes carbone et délivrent un certificat numéroté exigé par votre assurance."
+        itemsTitre="Ce que comprend chaque passage"
+        items={[
+          { t: 'Matériel professionnel', d: 'cannes carbone, hérissons nylon ou métal selon le conduit, contrôle du tirage' },
+          { t: 'Tous les foyers', d: 'cheminées ouvertes, inserts, poêles à bois et granulés, conduits gaz et fioul' },
+          { t: 'Certificat numéroté', d: 'remis avec la facture après chaque passage — votre assurance l’exige en cas de sinistre' },
+          { t: 'Tarifs affichés', d: 'bois 60 € · gaz 50 € · fioul 80 € · entretien chaudière fioul 125 €' },
+        ]}
+      />
 
-      <section className="border-y border-line bg-night-2 py-16">
+      <section id="suite" className="border-y border-line bg-night-2 py-16">
         <div className="mx-auto max-w-7xl px-5 lg:px-8">
           <SectionHead num="01" kicker="Tarifs — les seuls prix affichés du métier" />
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">

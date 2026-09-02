@@ -2,7 +2,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 import { MediaPlaceholder, CallCta, SectionHead } from '@/components/ui';
-import { Reveal, Fade } from '@/components/motion/motion';
+import { Fade } from '@/components/motion/motion';
+import PageHero from '@/components/PageHero';
 
 export const metadata: Metadata = {
   title: 'Le réseau abao.fr — ramonage, jardin, menuiserie, conciergerie',
@@ -35,20 +36,24 @@ const RESEAU = [
 
 export default function Page() {
   return (
-    <article className="pt-24">
-      <header className="mx-auto max-w-7xl px-5 pb-12 pt-8 lg:px-8">
-        <p className="kicker mb-4">Choisis pour leur sérieux et leur efficacité</p>
-        <h1 className="h-chapter text-[clamp(2.4rem,6.5vw,5rem)]">
-          <Reveal as="span">Le réseau</Reveal>{' '}
-          <span className="font-serif-it lowercase tracking-normal text-gradient-brass">abao.fr</span>
-        </h1>
-        <p className="mt-6 max-w-2xl text-ivory/65">
-          Une maison ne se résume pas à sa serrure. Au fil des années, ABAO a réuni des artisans
-          de confiance pour tout ce qui l’entoure — un seul appel au 06 60 09 49 76 les mobilise.
-        </p>
-      </header>
+    <article>
+      <PageHero
+        videoSrc="/videos/pv-atelier.mp4"
+        poster="/videos/pv-atelier-poster.jpg"
+        kicker="Choisis pour leur sérieux et leur efficacité"
+        titre="Le réseau abao.fr"
+        accent="une maison, des artisans amis."
+        intro="Une maison ne se résume pas à sa serrure — un seul appel au 06 60 09 49 76 mobilise tout le réseau."
+        itemsTitre="Les artisans du réseau"
+        items={[
+          { t: 'Ramonage certifié', d: 'cheminées, poêles et chaudières partout en PACA, certificat numéroté — dès 50 €' },
+          { t: 'Jardinier paysagiste', d: 'Thierry Scarica, 30 ans de métier autour d’Aubagne et de la vallée de l’Huveaune' },
+          { t: 'Menuiserie & fenêtres', d: 'ébénistes et menuisiers pour agencements et menuiseries, partout en France' },
+          { t: 'Conciergerie Marseille', d: 'Check Services gère vos locations courte durée : Airbnb, Abritel, Booking' },
+        ]}
+      />
 
-      <section className="border-t border-line bg-night-2 py-16">
+      <section id="suite" className="border-t border-line bg-night-2 py-16">
         <div className="mx-auto max-w-7xl px-5 lg:px-8">
           <SectionHead num="01" kicker="Les artisans du réseau" />
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">

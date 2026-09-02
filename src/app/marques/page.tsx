@@ -2,8 +2,9 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 import { MARQUES, MARQUES_AUTRES } from '@/data/site';
-import { CallCta, SectionHead } from '@/components/ui';
-import { Reveal, Fade } from '@/components/motion/motion';
+import { SectionHead } from '@/components/ui';
+import { Fade } from '@/components/motion/motion';
+import PageHero from '@/components/PageHero';
 
 export const metadata: Metadata = {
   title: 'Marques de serrures posées et remplacées — Fichet, Vachette, Bricard…',
@@ -13,21 +14,24 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <article className="pt-24">
-      <header className="mx-auto max-w-7xl px-5 pb-12 pt-8 lg:px-8">
-        <p className="kicker mb-4">La quincaillerie ABAO — stock permanent</p>
-        <h1 className="h-chapter text-[clamp(2.4rem,6.5vw,5rem)]">
-          <Reveal as="span">Les grandes marques,</Reveal><br />
-          <span className="font-serif-it normal-case tracking-normal text-gradient-brass">en stock, tout de suite</span>
-        </h1>
-        <p className="mt-6 max-w-2xl text-ivory/65">
-          Toutes testées, contrôlées et certifiées aux normes françaises et européennes (A2P).
-          Le bon cylindre au bon prix, posé le jour même — c’est l’avantage d’avoir sa propre quincaillerie.
-        </p>
-        <div className="mt-8"><CallCta label="Demander conseil" sub="devis gratuit" /></div>
-      </header>
+    <article>
+      <PageHero
+        videoSrc="/videos/pv-marques.mp4"
+        poster="/videos/pv-marques-poster.jpg"
+        kicker="La quincaillerie ABAO — stock permanent"
+        titre="Les grandes marques"
+        accent="en stock, tout de suite."
+        intro="Toutes testées, contrôlées et certifiées aux normes françaises et européennes (A2P) — le bon cylindre au bon prix, posé le jour même."
+        itemsTitre="Pourquoi notre stock change tout"
+        items={[
+          { t: '21 marques en rayon', d: 'Fichet, Vachette, Bricard, JPM, Mul-T-Lock, Picard… en stock physique à Roquevaire' },
+          { t: 'Certifiées A2P', d: 'cylindres et multipoints certifiés CNPP, du standard au très haute sécurité' },
+          { t: 'Remplacement à l’identique', d: 'la même référence posée le jour même — pas de commande, pas d’attente' },
+          { t: 'Conseil gratuit', d: 'le bon niveau de sécurité selon votre porte, votre quartier et votre assurance' },
+        ]}
+      />
 
-      <section className="border-t border-line bg-night-2 py-16">
+      <section id="suite" className="border-t border-line bg-night-2 py-16">
         <div className="mx-auto max-w-7xl px-5 lg:px-8">
           <SectionHead num="01" kicker="Marques principales" />
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
