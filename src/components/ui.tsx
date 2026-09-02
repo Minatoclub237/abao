@@ -9,14 +9,27 @@ import { Magnetic } from '@/components/motion/motion';
  * type="photo" : photo récupérée de l'ancien site, traitée duotone pour homogénéiser le grain stock.
  */
 export function MediaPlaceholder({
-  type = 'photo', src, alt = '', plan, note, ratio = 'aspect-[16/10]', className = '', priority = false,
+  type = 'photo', src, videoSrc, poster, alt = '', plan, note, ratio = 'aspect-[16/10]', className = '', priority = false,
 }: {
-  type?: 'video' | 'photo'; src?: string; alt?: string; plan?: string; note?: string;
+  type?: 'video' | 'photo'; src?: string; videoSrc?: string; poster?: string; alt?: string; plan?: string; note?: string;
   ratio?: string; className?: string; priority?: boolean;
 }) {
   return (
     <figure className={`slate-corner group relative overflow-hidden rounded-2xl border border-line bg-surface ${ratio} ${className}`}>
-      {src ? (
+      {videoSrc ? (
+        // vraie vidéo : lecture auto muette en boucle, poster en attendant
+        <video
+          className="absolute inset-0 h-full w-full object-cover"
+          src={videoSrc}
+          poster={poster}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          aria-label={alt}
+        />
+      ) : src ? (
         <Image
           src={src}
           alt={alt}
@@ -31,7 +44,7 @@ export function MediaPlaceholder({
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-night/85 via-night/10 to-night/30" />
       <div className="scanline" />
 
-      {type === 'video' && (
+      {type === 'video' && !videoSrc && (
         <span className="absolute left-1/2 top-1/2 grid size-16 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-brass-2/50 bg-night/50 backdrop-blur-sm transition-transform duration-500 group-hover:scale-110">
           <Play size={20} className="ml-0.5 text-brass-2" fill="currentColor" />
         </span>
@@ -39,7 +52,7 @@ export function MediaPlaceholder({
 
       <figcaption className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-4">
         <span className="flex items-center gap-2 font-mono-tech text-[0.62rem] uppercase text-brass-2/90">
-          {type === 'video' ? <Clapperboard size={13} /> : <Camera size={13} />}
+          {type === 'video' || videoSrc ? <Clapperboard size={13} /> : <Camera size={13} />}
           {plan ?? (type === 'video' ? 'Plan vidéo — à tourner' : 'Photo')}
         </span>
         {note && <span className="max-w-[55%] text-right font-mono-tech text-[0.6rem] leading-relaxed text-ivory/45">{note}</span>}

@@ -14,22 +14,22 @@ const METIERS = [
   {
     href: '/serrurerie', num: '01', titre: 'Serrurerie', accent: 'ouvrir sans casser',
     texte: 'Ouverture de portes claquées zéro dégât, remplacement de serrures et cylindres, multipoints, remise en sécurité après effraction.',
-    img: '/images/serrure-poignee.webp', video: 'PLAN 01 · Mains + radio sur porte claquée · 6 s',
+    videoSrc: '/videos/metier-serrurerie.mp4', poster: '/videos/metier-serrurerie-poster.jpg', video: 'Serrurerie · remplacement de cylindre',
   },
   {
     href: '/vitrerie', num: '02', titre: 'Vitrerie', accent: 'remplacer dans la journée',
     texte: 'Simple et double vitrage, feuilleté, Sécurit, anti-effraction, Néocéram pour inserts, miroiterie sur mesure et vitrines de commerces.',
-    img: '/images/vitrerie-couleurs.webp', video: 'PLAN 02 · Pose ventouse d’un double vitrage · 6 s',
+    videoSrc: '/videos/metier-vitrerie.mp4', poster: '/videos/metier-vitrerie-poster.jpg', video: 'Vitrerie · pose d’un vitrage',
   },
   {
     href: '/rideau-metallique', num: '03', titre: 'Rideaux métalliques', accent: 'débloquer, motoriser',
     texte: 'Fabrication sur mesure, déblocage en position ouverte ou fermée, remplacement de tablier, lames, axes et motorisation.',
-    img: '/images/rideau-depannage.webp', video: 'PLAN 03 · Rideau de boutique qui remonte · 5 s',
+    videoSrc: '/videos/metier-rideau.mp4', poster: '/videos/metier-rideau-poster.jpg', video: 'Rideau métallique · ouverture motorisée',
   },
   {
     href: '/contact', num: '04', titre: 'Ferronnerie', accent: 'forger sur mesure',
     texte: 'Grilles de défense, portails et ouvrages métalliques façonnés par nos artisans, dans la tradition de la forge.',
-    img: '/images/ferronnerie-forge.webp', video: 'PLAN 04 · Étincelles à la forge, ralenti · 4 s',
+    videoSrc: '/videos/metier-ferronnerie.mp4', poster: '/videos/metier-ferronnerie-poster.jpg', video: 'Ferronnerie · grille en atelier',
   },
 ];
 
@@ -105,7 +105,7 @@ export default function Metiers() {
             <article key={m.num} className="metier-panel w-full md:w-[min(66vw,780px)]" style={{ transformStyle: 'preserve-3d' }}>
               <Tilt3D max={4}>
                 <Link href={m.href} className="card-glass group block overflow-hidden rounded-3xl">
-                  <MediaPlaceholder type="video" src={m.img} alt={m.titre} plan={m.video} ratio="aspect-[16/8]" className="rounded-b-none border-0" />
+                  <MediaPlaceholder videoSrc={m.videoSrc} poster={m.poster} alt={m.titre} plan={m.video} ratio="aspect-[16/8]" className="rounded-b-none border-0" />
                   <Depth z={30} className="p-7 lg:p-8">
                     <div className="flex items-baseline justify-between gap-4">
                       <h3 className="h-chapter text-3xl lg:text-4xl">
