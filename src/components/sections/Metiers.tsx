@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -41,16 +41,20 @@ const METIERS = [
 export default function Metiers() {
   const wrap = useRef<HTMLElement>(null);
   const track = useRef<HTMLDivElement>(null);
-  const [extra, setExtra] = useState(0); // longueur horizontale à parcourir (px)
   // 1 px de piste consomme SPEED px de défilement : < 1 serait trop rapide pour lire
   const SPEED = 2.3;
 
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce), (max-width: 767px)').matches) return;
 
-    const measure = () => setExtra(Math.max(0, track.current!.scrollWidth - window.innerWidth));
+    // hauteur posée directement (pas de setState : le ScrollTrigger doit voir
+    // la vraie hauteur, puis être rafraîchi — sinon ses bornes restent périmées
+    // et les cartes sautent au lieu de coulisser)
+    const measure = () => {
+      const ex = Math.max(0, track.current!.scrollWidth - window.innerWidth);
+      wrap.current!.style.height = ex ? `calc(100vh + ${Math.round(ex * SPEED)}px)` : '';
+    };
     measure();
-    window.addEventListener('resize', measure);
 
     const ctx = gsap.context(() => {
       const tween = gsap.to(track.current, {
@@ -70,7 +74,12 @@ export default function Metiers() {
         });
       });
     }, wrap);
-    return () => { window.removeEventListener('resize', measure); ctx.revert(); };
+
+    const onResize = () => { measure(); ScrollTrigger.refresh(); };
+    window.addEventListener('resize', onResize);
+    ScrollTrigger.refresh();
+
+    return () => { window.removeEventListener('resize', onResize); ctx.revert(); };
   }, []);
 
   return (
@@ -78,7 +87,6 @@ export default function Metiers() {
       ref={wrap}
       id="metiers"
       className="relative bg-night"
-      style={extra ? { height: `calc(100vh + ${Math.round(extra * SPEED)}px)` } : undefined}
     >
       <div className="md:sticky md:top-0 md:flex md:h-screen md:flex-col md:justify-center md:overflow-x-clip">
         <div className="mx-auto w-full max-w-7xl px-5 pt-20 md:pt-0 lg:px-8">
