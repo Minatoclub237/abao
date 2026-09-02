@@ -68,12 +68,13 @@ export default function VitrerieCine() {
         <div className="relative">
           <Parallax speed={-34} className="relative z-[1]">
             <MediaPlaceholder
-              type="video" src="/images/bris-de-glace.webp" alt="Vitre brisée avant remplacement"
-              plan="PLAN 06 · Avant/après remplacement d’une vitrine · 8 s" ratio="aspect-[4/3]"
+              videoSrc="/videos/vitrerie-pose.mp4" poster="/videos/vitrerie-pose-poster.jpg"
+              alt="Vitrier posant une vitrine de commerce"
+              plan="Vitrerie · pose d’une vitrine" ratio="aspect-[4/3]"
             />
           </Parallax>
           <Parallax speed={26} className="relative z-0 -mt-16 ml-[18%] w-[70%]">
-            <MediaPlaceholder src="/images/vitrerie-couleurs.webp" alt="Briques de verre colorées" plan="Matière · verre" ratio="aspect-square" />
+            <MediaPlaceholder plain src="/images/verre-feuillete-macro.webp" alt="Tranche d’un verre feuilleté en macro" plan="Matière · verre feuilleté" ratio="aspect-square" />
           </Parallax>
         </div>
       </div>
