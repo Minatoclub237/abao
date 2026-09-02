@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
 import { SectionHead } from '@/components/ui';
 import { Reveal, Tilt3D } from '@/components/motion/motion';
@@ -11,10 +12,10 @@ import { Reveal, Tilt3D } from '@/components/motion/motion';
 gsap.registerPlugin(ScrollTrigger);
 
 const COUCHES = [
-  { nom: 'Porte existante', desc: 'votre porte d’origine, conservée avec sa décoration', tone: 'bg-[#3a4356]' },
-  { nom: 'Tôle acier 15/10ᵉ', desc: 'pliée en fourreau, elle épouse toute la porte', tone: 'bg-gradient-to-br from-[#8a93a3] to-[#5c6474]' },
-  { nom: 'Cornières anti-pince', desc: 'le pied-de-biche ne mord plus nulle part', tone: 'bg-gradient-to-br from-[#6d7787] to-[#454d5c]' },
-  { nom: 'Serrure multipoints A2P', desc: '3 à 7 pênes, certifiée CNPP', tone: 'bg-gradient-to-br from-brass to-[#8a6d14]' },
+  { nom: 'Porte existante', desc: 'votre porte d’origine, conservée avec sa décoration', img: '/images/couche-porte.webp' },
+  { nom: 'Tôle acier 15/10ᵉ', desc: 'pliée en fourreau, elle épouse toute la porte', img: '/images/couche-tole.webp' },
+  { nom: 'Cornières anti-pince', desc: 'le pied-de-biche ne mord plus nulle part', img: '/images/couche-cornieres.webp' },
+  { nom: 'Serrure multipoints A2P', desc: '3 à 7 pênes, certifiée CNPP', img: '/images/couche-multipoints.webp' },
 ];
 
 /**
@@ -70,15 +71,17 @@ export default function Blindage() {
               {COUCHES.map((c, i) => (
                 <div
                   key={c.nom}
-                  className={`couche absolute inset-0 rounded-xl border border-white/10 ${c.tone} shadow-2xl`}
+                  className="couche absolute inset-0 rounded-xl shadow-2xl"
                   style={{ transformStyle: 'preserve-3d', zIndex: COUCHES.length - i }}
                 >
+                  {/* photo commerciale de la couche, opacité 100 % */}
+                  <div className="absolute inset-0 overflow-hidden rounded-xl border border-white/15">
+                    <Image src={c.img} alt={c.nom} fill sizes="320px" className="object-cover" />
+                  </div>
                   {/* pastille numérotée de la couche */}
-                  <span className="couche-num absolute -right-2 -top-2 grid size-7 place-items-center rounded-full bg-flame font-mono-tech text-[0.72rem] font-bold text-white shadow-lg">
+                  <span className="couche-num absolute -right-2 -top-2 z-[2] grid size-7 place-items-center rounded-full bg-flame font-mono-tech text-[0.72rem] font-bold text-white shadow-lg">
                     {i + 1}
                   </span>
-                  {/* poignée sur la porte d'origine */}
-                  {i === 0 && <span className="absolute right-4 top-1/2 h-16 w-2 rounded-full bg-brass-2/80" />}
                 </div>
               ))}
             </div>
