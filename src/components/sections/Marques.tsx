@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { MARQUES_AUTRES } from '@/data/site';
 import { SectionHead } from '@/components/ui';
 
 /* Logos officiels récupérés (logo.dev) — slug = page /marques correspondante */
@@ -49,17 +48,6 @@ export default function Marques() {
               />
               <span className="font-display text-lg font-bold text-night/85 group-hover:text-flame">{l.nom}</span>
             </Link>
-          ))}
-        </div>
-      </div>
-
-      {/* les autres marques du stock, en pastilles discrètes */}
-      <div className="mt-8 [mask-image:linear-gradient(90deg,transparent,#000_8%,#000_92%,transparent)]">
-        <div className="flex w-max animate-marquee-slow gap-6 pr-6" style={{ animationDirection: 'reverse' }}>
-          {(() => { const rest = MARQUES_AUTRES.filter((m) => !['Medeco', 'Yale', 'Pollux', 'Abus'].includes(m)); return [...rest, ...rest]; })().map((m, i) => (
-            <span key={i} className="whitespace-nowrap rounded-full border border-line px-7 py-3 font-mono-tech text-sm uppercase tracking-[0.2em] text-ivory/45">
-              {m}
-            </span>
           ))}
         </div>
       </div>
