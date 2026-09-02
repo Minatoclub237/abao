@@ -6,6 +6,7 @@ import Blindage from '@/components/sections/Blindage';
 import Marques from '@/components/sections/Marques';
 import VitrerieCine from '@/components/sections/VitrerieCine';
 import RideauCine from '@/components/sections/RideauCine';
+import Avis from '@/components/sections/Avis';
 import Zones from '@/components/sections/Zones';
 import Chiffres from '@/components/sections/Chiffres';
 import Reseau from '@/components/sections/Reseau';
@@ -23,6 +24,7 @@ export default function Home() {
       <Marques />
       <VitrerieCine />
       <RideauCine />
+      <Avis />
       {/* la section Zones se fige, le final glisse par-dessus */}
       <StackUnder>
         <Zones />

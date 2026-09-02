@@ -6,7 +6,7 @@ export const SITE = {
   phoneHref: 'tel:+33660094976',
   phoneFixe: '04 91 50 80 67',
   email: 'abao.fr13@gmail.com',
-  address: 'Route Nationale 96, 13360 Roquevaire',
+  address: '799 Av. des Alliés, 13360 Roquevaire',
   addressAubagne: 'Av. Roger Salengro, 13400 Aubagne',
   nicolas: 'Nicolas',
   hours: '24h/24 — 7j/7',
