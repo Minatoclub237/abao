@@ -77,13 +77,14 @@ export default function RideauCine() {
 
         <div className="space-y-6">
           <MediaPlaceholder
-            type="video" src="/images/rideau-depannage.webp" alt="Artisan ABAO réparant un rideau métallique"
-            plan="PLAN 07 · Rideau qui remonte, contre-plongée · 5 s" note="photo réelle d’intervention — ancien site"
+            videoSrc="/videos/rideau-ouverture.mp4" poster="/videos/rideau-ouverture-poster.jpg"
+            alt="Technicien ouvrant le rideau métallique d’un commerce"
+            plan="Rideau métallique · ouverture d’un commerce"
             ratio="aspect-[16/10]"
           />
           <div className="grid grid-cols-2 gap-6">
-            <MediaPlaceholder src="/images/rideau-texture.webp" alt="Lames micro-perforées" plan="Matière · micro-perforé" ratio="aspect-[4/3]" />
-            <MediaPlaceholder src="/images/rideau-fabrication.webp" alt="Lames prêtes en atelier" plan="Atelier · fabrication" ratio="aspect-[4/3]" />
+            <MediaPlaceholder plain src="/images/rideau-microperfore.webp" alt="Tablier aluminium micro-perforé" plan="Matière · micro-perforé" ratio="aspect-[4/3]" />
+            <MediaPlaceholder plain src="/images/rideau-atelier.webp" alt="Métallier mesurant des lames d’aluminium" plan="Atelier · fabrication sur mesure" ratio="aspect-[4/3]" />
           </div>
         </div>
       </div>
