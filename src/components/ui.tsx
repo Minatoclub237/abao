@@ -9,10 +9,12 @@ import { Magnetic } from '@/components/motion/motion';
  * type="photo" : photo récupérée de l'ancien site, traitée duotone pour homogénéiser le grain stock.
  */
 export function MediaPlaceholder({
-  type = 'photo', src, videoSrc, poster, alt = '', plan, note, ratio = 'aspect-[16/10]', className = '', priority = false,
+  type = 'photo', src, videoSrc, poster, alt = '', plan, note, ratio = 'aspect-[16/10]', className = '', priority = false, plain = false,
 }: {
   type?: 'video' | 'photo'; src?: string; videoSrc?: string; poster?: string; alt?: string; plan?: string; note?: string;
   ratio?: string; className?: string; priority?: boolean;
+  /** plain : image affichée telle quelle, opacité 100 % (pas de duotone, voile minimal) */
+  plain?: boolean;
 }) {
   return (
     <figure className={`slate-corner group relative overflow-hidden rounded-2xl border border-line bg-surface ${ratio} ${className}`}>
@@ -36,12 +38,12 @@ export function MediaPlaceholder({
           fill
           priority={priority}
           sizes="(max-width: 768px) 100vw, 50vw"
-          className="duotone object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-[1.06]"
+          className={`${plain ? '' : 'duotone '}object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-[1.06]`}
         />
       ) : (
         <div className="absolute inset-0 bg-[radial-gradient(90%_120%_at_20%_0%,#182338_0%,#0b1220_55%,#06090f_100%)]" />
       )}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-night/85 via-night/10 to-night/30" />
+      <div className={`pointer-events-none absolute inset-0 ${plain ? 'bg-gradient-to-t from-night/55 via-transparent to-transparent' : 'bg-gradient-to-t from-night/85 via-night/10 to-night/30'}`} />
       <div className="scanline" />
 
       {type === 'video' && !videoSrc && (

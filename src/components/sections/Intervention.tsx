@@ -82,18 +82,17 @@ export default function Intervention() {
           <div className="sticky top-24 space-y-6" style={{ transformStyle: 'preserve-3d' }}>
             <Parallax speed={-30}>
               <MediaPlaceholder
-                type="video" src="/images/cylindre-macro.webp" alt="Cylindre de serrure en gros plan"
-                plan="PLAN 05 · Scroll-scrub · ouverture fine d’une porte claquée · 150 frames"
-                note="à tourner en plan fixe, 4K, lumière frontale"
+                plain src="/images/intervention-ouverture.webp" alt="Ouverture zéro dégât d’une serrure multipoints"
+                plan="Intervention · ouverture zéro dégât"
                 ratio="aspect-[4/3]"
               />
             </Parallax>
             <div className="grid grid-cols-2 gap-6">
               <Parallax speed={22}>
-                <MediaPlaceholder src="/images/quincaillerie-cles.webp" alt="Mur de clés de la quincaillerie ABAO" plan="Quincaillerie · stock réel" ratio="aspect-[4/5]" />
+                <MediaPlaceholder plain src="/images/quincaillerie-mur.webp" alt="Mur de clés et machine de la quincaillerie ABAO" plan="Quincaillerie · stock réel" ratio="aspect-[4/5]" />
               </Parallax>
               <Parallax speed={-16}>
-                <MediaPlaceholder src="/images/reproduction-cles.webp" alt="Reproduction de clés à l’atelier" plan="Atelier · reproduction de clés" ratio="aspect-[4/5]" />
+                <MediaPlaceholder plain src="/images/atelier-reproduction.webp" alt="Reproduction de clé à l’établi" plan="Atelier · reproduction de clés" ratio="aspect-[4/5]" />
               </Parallax>
             </div>
           </div>
