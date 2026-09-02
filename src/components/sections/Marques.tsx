@@ -1,12 +1,26 @@
 import Link from 'next/link';
-import { MARQUES, MARQUES_AUTRES } from '@/data/site';
+import Image from 'next/image';
+import { MARQUES_AUTRES } from '@/data/site';
 import { SectionHead } from '@/components/ui';
 
-/* Coffre à marques : double marquee inversé, chaque nom cliquable */
-export default function Marques() {
-  const ligne1 = MARQUES.map((m) => ({ nom: m.nom, slug: m.slug }));
-  const ligne2 = MARQUES_AUTRES.map((nom) => ({ nom, slug: null as string | null }));
+/* Logos officiels récupérés (logo.dev) — slug = page /marques correspondante */
+const LOGOS: { file: string; nom: string; slug: string | null }[] = [
+  { file: 'fichet', nom: 'Fichet', slug: 'fichet' },
+  { file: 'vachette', nom: 'Vachette', slug: 'vachette' },
+  { file: 'bricard', nom: 'Bricard', slug: 'bricard' },
+  { file: 'jpm', nom: 'JPM', slug: 'jpm' },
+  { file: 'mul-t-lock', nom: 'Mul-T-Lock', slug: 'mul-t-lock' },
+  { file: 'heracles', nom: 'Héraclès', slug: 'heracles' },
+  { file: 'dierre', nom: 'Dierre', slug: 'dierre' },
+  { file: 'iseo', nom: 'Iseo', slug: 'iseo' },
+  { file: 'abus', nom: 'Abus', slug: null },
+  { file: 'yale', nom: 'Yale', slug: null },
+  { file: 'medeco', nom: 'Medeco', slug: null },
+  { file: 'pollux', nom: 'Pollux', slug: null },
+];
 
+/* Bande blanche : les logos réels défilent sur une seule ligne */
+export default function Marques() {
   return (
     <section className="relative overflow-x-clip border-y border-line bg-night-2 py-20 lg:py-24">
       <div className="mx-auto max-w-7xl px-5 lg:px-8">
@@ -16,23 +30,35 @@ export default function Marques() {
         </h2>
       </div>
 
-      <div className="mt-12 space-y-6 [mask-image:linear-gradient(90deg,transparent,#000_8%,#000_92%,transparent)]">
-        <div className="flex w-max animate-marquee gap-6 pr-6">
-          {[...ligne1, ...ligne1].map((m, i) => (
+      {/* bande blanche pleine largeur */}
+      <div className="mt-12 bg-white py-6 shadow-[0_0_60px_rgba(232,199,102,0.08)]">
+        <div className="flex w-max animate-marquee items-center gap-14 pr-14">
+          {[...LOGOS, ...LOGOS].map((l, i) => (
             <Link
               key={i}
-              href={m.slug ? `/marques/${m.slug}` : '/marques'}
-              className="card-glass group flex items-center gap-3 whitespace-nowrap rounded-full px-7 py-3.5 transition-colors hover:border-brass/50"
+              href={l.slug ? `/marques/${l.slug}` : '/marques'}
+              className="group flex shrink-0 items-center gap-3 transition-transform duration-300 hover:scale-105"
+              aria-label={`Serrures ${l.nom}`}
             >
-              <span className="size-1.5 rounded-full bg-flame transition-transform group-hover:scale-150" />
-              <span className="font-display text-xl font-bold text-ivory/85 group-hover:text-brass-2">{m.nom}</span>
+              <Image
+                src={`/logos/${l.file}.png`}
+                alt={`Logo ${l.nom}`}
+                width={56}
+                height={56}
+                className="size-12 rounded-lg object-contain shadow-sm lg:size-14"
+              />
+              <span className="font-display text-lg font-bold text-night/85 group-hover:text-flame">{l.nom}</span>
             </Link>
           ))}
         </div>
+      </div>
+
+      {/* les autres marques du stock, en pastilles discrètes */}
+      <div className="mt-8 [mask-image:linear-gradient(90deg,transparent,#000_8%,#000_92%,transparent)]">
         <div className="flex w-max animate-marquee-slow gap-6 pr-6" style={{ animationDirection: 'reverse' }}>
-          {[...ligne2, ...ligne2].map((m, i) => (
+          {(() => { const rest = MARQUES_AUTRES.filter((m) => !['Medeco', 'Yale', 'Pollux', 'Abus'].includes(m)); return [...rest, ...rest]; })().map((m, i) => (
             <span key={i} className="whitespace-nowrap rounded-full border border-line px-7 py-3 font-mono-tech text-sm uppercase tracking-[0.2em] text-ivory/45">
-              {m.nom}
+              {m}
             </span>
           ))}
         </div>

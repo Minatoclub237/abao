@@ -7,7 +7,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
 import { SectionHead } from '@/components/ui';
-import { Reveal, Fade } from '@/components/motion/motion';
+import { Reveal, Tilt3D } from '@/components/motion/motion';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -25,6 +25,24 @@ export default function Blindage() {
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const ctx = gsap.context(() => {
+      // assemblage d'armure : les 4 pièces arrivent éclatées dans la profondeur
+      // (4 directions différentes + rotation) et convergent au fil du scroll
+      const DEPART = [
+        { x: -190, y: -140, rotateY: -32, rotateZ: -7, z: -320 },
+        { x: 210, y: -110, rotateY: 28, rotateZ: 6, z: -380 },
+        { x: -170, y: 160, rotateY: 26, rotateZ: 6, z: -300 },
+        { x: 190, y: 140, rotateY: -30, rotateZ: -8, z: -360 },
+      ];
+      gsap.utils.toArray<HTMLElement>('.armure-piece').forEach((el, i) => {
+        gsap.fromTo(el, { ...DEPART[i], opacity: 0.15 }, {
+          x: 0, y: 0, z: 0, rotateY: 0, rotateZ: 0, opacity: 1, ease: 'none',
+          scrollTrigger: { trigger: wrap.current, start: 'top 88%', end: 'center 52%', scrub: 0.5 },
+        });
+        // une fois assemblée, chaque pièce flotte doucement, en alternance
+        gsap.to(el, {
+          y: i % 2 ? 10 : -10, duration: 2.6 + i * 0.3, ease: 'sine.inOut', yoyo: true, repeat: -1,
+        });
+      });
       gsap.utils.toArray<HTMLElement>('.jauge').forEach((el) => {
         gsap.fromTo(el, { width: 0 }, {
           width: el.dataset.w + '%', duration: 1.1, ease: 'power3.out',
@@ -38,26 +56,28 @@ export default function Blindage() {
   return (
     <section ref={wrap} className="relative overflow-x-clip bg-night py-24 lg:py-32">
       <div className="mx-auto grid max-w-7xl items-center gap-16 px-5 lg:grid-cols-2 lg:px-8">
-        {/* les 4 couches du blindage en cartes photos commerciales, opacité 100 % */}
-        <ol className="order-2 grid grid-cols-2 gap-4 lg:order-1 lg:gap-5">
+        {/* assemblage d'armure : 4 pièces 3D qui convergent au scroll puis flottent */}
+        <ol className="order-2 grid grid-cols-2 gap-4 lg:order-1 lg:gap-5" style={{ perspective: 1300 }}>
           {COUCHES.map((c, i) => (
-            <Fade key={c.nom} delay={i * 0.08}>
-              <li className={`card-glass group overflow-hidden rounded-2xl ${i % 2 === 1 ? 'lg:translate-y-6' : ''}`}>
-                <div className="relative aspect-[4/3] overflow-hidden">
-                  <Image
-                    src={c.img} alt={c.nom} fill sizes="(max-width: 640px) 45vw, 300px"
-                    className="object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.07]"
-                  />
-                  <span className="absolute left-3 top-3 grid size-7 place-items-center rounded-full bg-flame font-mono-tech text-[0.72rem] font-bold text-white shadow-lg">
-                    {i + 1}
-                  </span>
+            <li key={c.nom} className="armure-piece will-change-transform" style={{ transformStyle: 'preserve-3d' }}>
+              <Tilt3D max={8}>
+                <div className="card-glass group overflow-hidden rounded-2xl">
+                  <div className="relative aspect-[4/3] overflow-hidden">
+                    <Image
+                      src={c.img} alt={c.nom} fill sizes="(max-width: 640px) 45vw, 300px"
+                      className="object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.07]"
+                    />
+                    <span className="absolute left-3 top-3 grid size-7 place-items-center rounded-full bg-flame font-mono-tech text-[0.72rem] font-bold text-white shadow-lg">
+                      {i + 1}
+                    </span>
+                  </div>
+                  <div className="p-4">
+                    <p className="font-mono-tech text-[0.64rem] uppercase tracking-[0.16em] text-brass-2">{c.nom}</p>
+                    <p className="mt-1 text-[0.76rem] leading-snug text-ivory/55">{c.desc}</p>
+                  </div>
                 </div>
-                <div className="p-4">
-                  <p className="font-mono-tech text-[0.64rem] uppercase tracking-[0.16em] text-brass-2">{c.nom}</p>
-                  <p className="mt-1 text-[0.76rem] leading-snug text-ivory/55">{c.desc}</p>
-                </div>
-              </li>
-            </Fade>
+              </Tilt3D>
+            </li>
           ))}
         </ol>
 
