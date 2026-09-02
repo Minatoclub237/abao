@@ -42,6 +42,8 @@ export default function Metiers() {
   const wrap = useRef<HTMLElement>(null);
   const track = useRef<HTMLDivElement>(null);
   const [extra, setExtra] = useState(0); // longueur horizontale à parcourir (px)
+  // 1 px de piste consomme SPEED px de défilement : < 1 serait trop rapide pour lire
+  const SPEED = 2.3;
 
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce), (max-width: 767px)').matches) return;
@@ -59,8 +61,8 @@ export default function Metiers() {
         },
       });
       gsap.utils.toArray<HTMLElement>('.metier-panel').forEach((panel) => {
-        gsap.fromTo(panel, { rotateY: 9, scale: 0.96 }, {
-          rotateY: -9, scale: 1, ease: 'none',
+        gsap.fromTo(panel, { rotateY: 5, scale: 0.97 }, {
+          rotateY: -5, scale: 1, ease: 'none',
           scrollTrigger: {
             trigger: panel, containerAnimation: tween,
             start: 'left right', end: 'right left', scrub: true,
@@ -76,7 +78,7 @@ export default function Metiers() {
       ref={wrap}
       id="metiers"
       className="relative bg-night"
-      style={extra ? { height: `calc(100vh + ${extra}px)` } : undefined}
+      style={extra ? { height: `calc(100vh + ${Math.round(extra * SPEED)}px)` } : undefined}
     >
       <div className="md:sticky md:top-0 md:flex md:h-screen md:flex-col md:justify-center md:overflow-x-clip">
         <div className="mx-auto w-full max-w-7xl px-5 pt-20 md:pt-0 lg:px-8">
