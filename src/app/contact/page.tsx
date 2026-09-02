@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
-import { Phone, Mail, MapPin, Clock, Star, ExternalLink } from 'lucide-react';
+import { Star, ExternalLink } from 'lucide-react';
 import { SITE, GARANTIES } from '@/data/site';
 import { AVIS, GOOGLE_AVIS } from '@/data/avis';
 import { SectionHead } from '@/components/ui';
 import PageHero from '@/components/PageHero';
+import ContactForm from '@/components/ContactForm';
 
 export const metadata: Metadata = {
   title: 'Contact — un seul numéro : 06 60 09 49 76',
@@ -30,22 +31,9 @@ export default function Page() {
         ]}
       />
 
-      <section id="suite" className="border-t border-line bg-night-2 py-16">
-        <div className="mx-auto grid max-w-7xl gap-6 px-5 sm:grid-cols-2 lg:grid-cols-4 lg:px-8">
-          {[
-            { icon: Phone, t: 'Téléphone', d: `${SITE.phone} — fixe ${SITE.phoneFixe}` },
-            { icon: Mail, t: 'E-mail', d: SITE.email },
-            { icon: MapPin, t: 'Atelier & quincaillerie', d: `${SITE.address} · antenne ${SITE.addressAubagne}` },
-            { icon: Clock, t: 'Horaires', d: `${SITE.hours} — urgences comprises, arrivée en ${SITE.delai}` },
-          ].map((x) => (
-            <div key={x.t} className="card-glass rounded-2xl p-6">
-              <span className="grid size-10 place-items-center rounded-lg border border-brass/40 bg-brass/10 text-brass-2"><x.icon size={16} /></span>
-              <p className="mt-3 font-display font-bold">{x.t}</p>
-              <p className="mt-1 break-words text-sm text-ivory/60">{x.d}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+      <div id="suite" className="border-t border-line bg-night-2">
+        <ContactForm />
+      </div>
 
       {/* avis Google */}
       <section className="mx-auto max-w-7xl px-5 py-16 lg:px-8">
