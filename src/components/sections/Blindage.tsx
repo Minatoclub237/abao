@@ -6,31 +6,47 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowRight } from 'lucide-react';
 import { SectionHead } from '@/components/ui';
-import { Reveal } from '@/components/motion/motion';
+import { Reveal, Tilt3D } from '@/components/motion/motion';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const COUCHES = [
-  { nom: 'Porte existante', desc: 'votre porte d’origine, conservée', tone: 'bg-[#3a4356]' },
-  { nom: 'Tôle acier 15/10ᵉ', desc: 'pliée en fourreau, épouse la porte', tone: 'bg-gradient-to-br from-[#8a93a3] to-[#5c6474]' },
-  { nom: 'Cornières anti-pince', desc: 'le pied-de-biche ne mord plus', tone: 'bg-gradient-to-br from-[#6d7787] to-[#454d5c]' },
+  { nom: 'Porte existante', desc: 'votre porte d’origine, conservée avec sa décoration', tone: 'bg-[#3a4356]' },
+  { nom: 'Tôle acier 15/10ᵉ', desc: 'pliée en fourreau, elle épouse toute la porte', tone: 'bg-gradient-to-br from-[#8a93a3] to-[#5c6474]' },
+  { nom: 'Cornières anti-pince', desc: 'le pied-de-biche ne mord plus nulle part', tone: 'bg-gradient-to-br from-[#6d7787] to-[#454d5c]' },
   { nom: 'Serrure multipoints A2P', desc: '3 à 7 pênes, certifiée CNPP', tone: 'bg-gradient-to-br from-brass to-[#8a6d14]' },
 ];
 
-/* Coupe de porte blindée : les couches s'écartent en Z + X au scroll */
+/**
+ * Coupe de porte blindée : les couches s'écartent au scroll, puis la pile
+ * continue de « respirer » (flottement infini + inclinaison à la souris).
+ * Légende numérotée sous le visuel — jamais d'étiquettes superposées.
+ */
 export default function Blindage() {
   const wrap = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const ctx = gsap.context(() => {
-      const layers = gsap.utils.toArray<HTMLElement>('.couche');
-      layers.forEach((el, i) => {
-        gsap.fromTo(el, { x: 0, z: 0, rotateY: 0 }, {
-          x: i * 44, z: i * 60, rotateY: -16, ease: 'none',
-          scrollTrigger: { trigger: wrap.current, start: 'top 65%', end: 'center 40%', scrub: 0.5 },
+      // éventail scrubé au défilement
+      // pas de translation Z : la perspective ferait grossir la couche avant
+      // jusqu'à déborder sur la colonne de texte (vérifié en capture)
+      gsap.utils.toArray<HTMLElement>('.couche').forEach((el, i) => {
+        gsap.fromTo(el, { x: 0, y: 0, rotateY: 0, scale: 1 }, {
+          x: i * 46, y: -i * 10, rotateY: -13, scale: 1 + i * 0.015, ease: 'none',
+          scrollTrigger: { trigger: wrap.current, start: 'top 70%', end: 'center 42%', scrub: 0.5 },
         });
       });
+      // respiration permanente de la pile (indépendante du scroll)
+      gsap.to('.couche-stack', {
+        y: -12, rotateY: 5, duration: 3.2, ease: 'sine.inOut', yoyo: true, repeat: -1,
+      });
+      // les numéros s'allument un à un
+      gsap.fromTo('.couche-num', { scale: 0, opacity: 0 }, {
+        scale: 1, opacity: 1, stagger: 0.12, duration: 0.5, ease: 'back.out(2)',
+        scrollTrigger: { trigger: wrap.current, start: 'top 55%' },
+      });
+      // jauges
       gsap.utils.toArray<HTMLElement>('.jauge').forEach((el) => {
         gsap.fromTo(el, { width: 0 }, {
           width: el.dataset.w + '%', duration: 1.1, ease: 'power3.out',
@@ -44,24 +60,44 @@ export default function Blindage() {
   return (
     <section ref={wrap} className="relative overflow-x-clip bg-night py-24 lg:py-32">
       <div className="mx-auto grid max-w-7xl items-center gap-16 px-5 lg:grid-cols-2 lg:px-8">
-        {/* coupe 3D en couches */}
-        <div className="order-2 lg:order-1" style={{ perspective: 1200 }}>
-          <div className="relative mx-auto h-[380px] w-[min(300px,80%)] lg:h-[460px]" style={{ transformStyle: 'preserve-3d' }}>
-            {COUCHES.map((c, i) => (
-              <div
-                key={c.nom}
-                className={`couche absolute inset-0 rounded-xl border border-white/10 ${c.tone} shadow-2xl`}
-                style={{ transformStyle: 'preserve-3d', zIndex: COUCHES.length - i }}
-              >
-                <div className="absolute -bottom-1 left-3 translate-y-full pt-2">
-                  <p className="whitespace-nowrap font-mono-tech text-[0.6rem] uppercase tracking-[0.2em] text-brass-2">{c.nom}</p>
-                  <p className="whitespace-nowrap text-[0.68rem] text-ivory/50">{c.desc}</p>
+        {/* coupe 3D en couches + légende */}
+        <div className="order-2 lg:order-1">
+          <Tilt3D max={7} className="mx-auto w-fit">
+            <div
+              className="couche-stack relative h-[340px] w-[min(250px,72vw)] lg:h-[420px]"
+              style={{ transformStyle: 'preserve-3d', perspective: 1200 }}
+            >
+              {COUCHES.map((c, i) => (
+                <div
+                  key={c.nom}
+                  className={`couche absolute inset-0 rounded-xl border border-white/10 ${c.tone} shadow-2xl`}
+                  style={{ transformStyle: 'preserve-3d', zIndex: COUCHES.length - i }}
+                >
+                  {/* pastille numérotée de la couche */}
+                  <span className="couche-num absolute -right-2 -top-2 grid size-7 place-items-center rounded-full bg-flame font-mono-tech text-[0.72rem] font-bold text-white shadow-lg">
+                    {i + 1}
+                  </span>
+                  {/* poignée sur la porte d'origine */}
+                  {i === 0 && <span className="absolute right-4 top-1/2 h-16 w-2 rounded-full bg-brass-2/80" />}
                 </div>
-                {/* poignée sur la 1re couche */}
-                {i === 0 && <span className="absolute right-4 top-1/2 h-16 w-2 rounded-full bg-brass-2/80" />}
-              </div>
+              ))}
+            </div>
+          </Tilt3D>
+
+          {/* légende numérotée — lisible, jamais superposée */}
+          <ol className="mx-auto mt-20 grid max-w-lg grid-cols-1 gap-x-8 gap-y-4 sm:grid-cols-2">
+            {COUCHES.map((c, i) => (
+              <li key={c.nom} className="flex items-start gap-3">
+                <span className="mt-0.5 grid size-6 shrink-0 place-items-center rounded-full border border-flame/60 font-mono-tech text-[0.65rem] text-flame">
+                  {i + 1}
+                </span>
+                <div>
+                  <p className="font-mono-tech text-[0.66rem] uppercase tracking-[0.18em] text-brass-2">{c.nom}</p>
+                  <p className="text-[0.78rem] leading-snug text-ivory/55">{c.desc}</p>
+                </div>
+              </li>
             ))}
-          </div>
+          </ol>
         </div>
 
         <div className="order-1 lg:order-2">
