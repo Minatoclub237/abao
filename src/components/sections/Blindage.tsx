@@ -12,10 +12,10 @@ import { Reveal, Tilt3D } from '@/components/motion/motion';
 gsap.registerPlugin(ScrollTrigger);
 
 const COUCHES = [
-  { nom: 'Porte existante', desc: 'votre porte d’origine, conservée avec sa décoration', img: '/images/couche-porte.webp' },
-  { nom: 'Tôle acier 15/10ᵉ', desc: 'pliée en fourreau, elle épouse toute la porte', img: '/images/couche-tole.webp' },
-  { nom: 'Cornières anti-pince', desc: 'le pied-de-biche ne mord plus nulle part', img: '/images/couche-cornieres.webp' },
-  { nom: 'Serrure multipoints A2P', desc: '3 à 7 pênes, certifiée CNPP', img: '/images/couche-multipoints.webp' },
+  { nom: 'Porte existante', desc: 'votre porte d’origine, conservée avec sa décoration', img: '/images/couche-porte.webp', tone: 'bg-[#3a4356]' },
+  { nom: 'Tôle acier 15/10ᵉ', desc: 'pliée en fourreau, elle épouse toute la porte', img: '/images/couche-tole.webp', tone: 'bg-gradient-to-br from-[#8a93a3] to-[#5c6474]' },
+  { nom: 'Cornières anti-pince', desc: 'le pied-de-biche ne mord plus nulle part', img: '/images/couche-cornieres.webp', tone: 'bg-gradient-to-br from-[#6d7787] to-[#454d5c]' },
+  { nom: 'Serrure multipoints A2P', desc: '3 à 7 pênes, certifiée CNPP', img: '/images/couche-multipoints.webp', tone: 'bg-gradient-to-br from-brass to-[#8a6d14]' },
 ];
 
 /**
@@ -71,32 +71,36 @@ export default function Blindage() {
               {COUCHES.map((c, i) => (
                 <div
                   key={c.nom}
-                  className="couche absolute inset-0 rounded-xl shadow-2xl"
+                  className={`couche absolute inset-0 rounded-xl border border-white/10 ${c.tone} shadow-2xl`}
                   style={{ transformStyle: 'preserve-3d', zIndex: COUCHES.length - i }}
                 >
-                  {/* photo commerciale de la couche, opacité 100 % */}
-                  <div className="absolute inset-0 overflow-hidden rounded-xl border border-white/15">
-                    <Image src={c.img} alt={c.nom} fill sizes="320px" className="object-cover" />
-                  </div>
                   {/* pastille numérotée de la couche */}
                   <span className="couche-num absolute -right-2 -top-2 z-[2] grid size-7 place-items-center rounded-full bg-flame font-mono-tech text-[0.72rem] font-bold text-white shadow-lg">
                     {i + 1}
                   </span>
+                  {/* poignée sur la porte d'origine */}
+                  {i === 0 && <span className="absolute right-4 top-1/2 h-16 w-2 rounded-full bg-brass-2/80" />}
                 </div>
               ))}
             </div>
           </Tilt3D>
 
-          {/* légende numérotée — lisible, jamais superposée */}
-          <ol className="mx-auto mt-20 grid max-w-lg grid-cols-1 gap-x-8 gap-y-4 sm:grid-cols-2">
+          {/* légende en cartes photos commerciales, opacité 100 % */}
+          <ol className="mx-auto mt-20 grid max-w-xl grid-cols-2 gap-4">
             {COUCHES.map((c, i) => (
-              <li key={c.nom} className="flex items-start gap-3">
-                <span className="mt-0.5 grid size-6 shrink-0 place-items-center rounded-full border border-flame/60 font-mono-tech text-[0.65rem] text-flame">
-                  {i + 1}
-                </span>
-                <div>
-                  <p className="font-mono-tech text-[0.66rem] uppercase tracking-[0.18em] text-brass-2">{c.nom}</p>
-                  <p className="text-[0.78rem] leading-snug text-ivory/55">{c.desc}</p>
+              <li key={c.nom} className="card-glass group overflow-hidden rounded-2xl">
+                <div className="relative aspect-[4/3] overflow-hidden">
+                  <Image
+                    src={c.img} alt={c.nom} fill sizes="(max-width: 640px) 45vw, 280px"
+                    className="object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.07]"
+                  />
+                  <span className="absolute left-3 top-3 grid size-7 place-items-center rounded-full bg-flame font-mono-tech text-[0.72rem] font-bold text-white shadow-lg">
+                    {i + 1}
+                  </span>
+                </div>
+                <div className="p-4">
+                  <p className="font-mono-tech text-[0.64rem] uppercase tracking-[0.16em] text-brass-2">{c.nom}</p>
+                  <p className="mt-1 text-[0.76rem] leading-snug text-ivory/55">{c.desc}</p>
                 </div>
               </li>
             ))}
